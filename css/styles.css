@@ -48,3 +48,25 @@ footer {
     background-color: #0d4380;
     color: #ffffff;
 }
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.whatsapp-float img {
+  width: 60px;
+  height: 60px;
+}
+
+/* Iconos del footer */
+.social-icons a {
+  color: #ffffff;
+  margin: 0 10px;
+  font-size: 24px;
+}
+
+.social-icons a:hover {
+  color: #e4eef5;
+}
