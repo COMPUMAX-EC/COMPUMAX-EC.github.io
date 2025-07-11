@@ -14,6 +14,15 @@ interface TeamMember {
   description: string
 }
 
+// Interfaz para clientes
+interface Client {
+  name: string
+  logo: string
+  description: string
+  project: string
+  testimonial: string
+}
+
 // 3. COMPONENTE FUNCIONAL (la forma moderna de React)
 const AboutPage = () => {
   // 4. ESTADO (datos que pueden cambiar)
@@ -25,13 +34,13 @@ const AboutPage = () => {
       name: "Geovanny Basantes",
       role: "CISO y Project Manager",
       image: "/assets/team/geovanny.jpeg",
-      description: "Desarrollador Full Stack con 4 años de experiencia"
+      description: "Desarrollador Full Stack con 3 años de experiencia"
     },
     {
       name: "María Jose Basantes",
       role: "Diseñadora Gráfica",
       image: "/assets/team/maria.jpg", 
-      description: "10 años de experiencia en diseño gráfico"
+      description: "5 años de experiencia en diseño gráfico"
     },
     {
       name: "Stalin Basantes",
@@ -42,8 +51,54 @@ const AboutPage = () => {
     {
       name: "Danilo Bolaños",
       role: "Diseñador Gráfico",
-      image: "/assets/team/danilo.jpg", 
-      description: "Especialista en diseño y creación de soliciones graficas "
+      image: "/assets/team/danilo.png", 
+      description: "Especialista en diseño y creación de soluciones gráficas"
+    }
+  ]
+
+  // 5b. DATOS DE CLIENTES
+  const clients: Client[] = [
+    {
+      name: "GAD Julio Andrade",
+      logo: "/assets/clients/gadJulio.jpg",
+      description: "Gobierno Autonomo Descentralizado",
+      project: "Desarrollo de aplicación web",
+      testimonial: "Compumax transformó nuestra idea en una realidad digital excepcional. Su equipo profesional y atención al detalle superaron nuestras expectativas."
+    },
+    {
+      name: "Credimax",
+      logo: "/assets/clients/credimax.jpg", 
+      description: "Cadena de Almacenes",
+      project: "Sistema de pedidos online",
+      testimonial: "Gracias a Compumax, nuestros pedidos online aumentaron un 25%. La plataforma es intuitiva y nuestros clientes están encantados."
+    },
+    {
+      name: "GAD Municipal Sucumbios",
+      logo: "/assets/clients/gadSucumbios.jpg",
+      description: "Gobierno Autónomo Descentralizado",
+      project: "Sistema de citas médicas",
+      testimonial: "La automatización de nuestro sistema de citas nos ha permitido enfocarnos en lo que mejor hacemos: cuidar a nuestros pacientes."
+    },
+    {
+      name: "Junta Administradora de Agua Potable Julio Andrade",
+      logo: "/assets/clients/junta_agua_julio.jpeg",
+      description: "Tienda ecológica",
+      project: "E-commerce completo",
+      testimonial: "Nuestro e-commerce desarrollado por Compumax nos ha permitido llegar a más clientes y multiplicar nuestras ventas."
+    },
+    {
+      name: "Comercial Tío Tarqui",
+      logo: "/assets/clients/tarqui.png",
+      description: "Cadena de tiendas",
+      project: "Plataforma de aprendizaje",
+      testimonial: "La plataforma educativa que crearon ha revolucionado la forma en que enseñamos y nuestros estudiantes aprenden."
+    },
+    {
+      name: "Team Montañeros 04",
+      logo: "/assets/clients/montañeros.jpg",
+      description: "Club de ciclismo",
+      project: "Sistema de rastreo",
+      testimonial: "El sistema de rastreo nos ha dado total control sobre nuestras operaciones. Excelente trabajo del equipo de Compumax."
     }
   ]
 
@@ -93,6 +148,18 @@ const AboutPage = () => {
               }`}
             >
               Equipo
+            </button>
+
+            {/* Botón Clientes */}
+            <button
+              onClick={() => handleSectionChange('clientes')}
+              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                activeSection === 'clientes' 
+                  ? 'bg-blue-600 text-white' 
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              Clientes
             </button>
 
             {/* Botón Misión */}
@@ -184,6 +251,98 @@ const AboutPage = () => {
                     </p>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Sección Clientes */}
+          {activeSection === 'clientes' && (
+            <div className="bg-white rounded-lg shadow-lg p-8">
+              <h2 className="text-3xl font-bold text-gray-800 mb-6">
+                Nuestros Clientes
+              </h2>
+              <p className="text-gray-600 mb-12 text-center max-w-3xl mx-auto">
+                Hemos tenido el privilegio de trabajar con empresas increíbles que confían en nosotros para llevar sus proyectos al siguiente nivel.
+              </p>
+              
+              {/* Grid de clientes */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {clients.map((client, index) => (
+                  <div key={index} className="bg-gray-50 rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
+                    {/* Logo del cliente */}
+                    <div className="w-20 h-20 mx-auto mb-4 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                      {/* Intentar mostrar logo real, si no existe mostrar placeholder */}
+                      {client.logo && (
+                        <div className="w-16 h-16 relative">
+                          <Image
+                            src={client.logo}
+                            alt={`Logo de ${client.name}`}
+                            width={64}
+                            height={64}
+                            className="object-contain w-full h-full rounded"
+                            onError={(e) => {
+                              // Si falla la imagen, mostrar placeholder
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              target.nextElementSibling?.setAttribute('style', 'display: flex');
+                            }}
+                          />
+                          {/* Placeholder que se muestra si la imagen falla */}
+                          <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center absolute top-0 left-0" style={{display: 'none'}}>
+                            <span className="text-white font-bold text-lg">
+                              {client.name.charAt(0)}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Información del cliente */}
+                    <div className="text-center">
+                      <h3 className="text-xl font-bold text-gray-800 mb-2">
+                        {client.name}
+                      </h3>
+                      <p className="text-blue-600 font-semibold mb-2">
+                        {client.description}
+                      </p>
+                      <p className="text-gray-600 text-sm mb-4">
+                        <span className="font-semibold">Proyecto:</span> {client.project}
+                      </p>
+                      
+                      {/* Testimonial */}
+                      <div className="bg-white rounded-lg p-4 border-l-4 border-blue-500">
+                        <p className="text-gray-700 text-sm italic">
+                          "{client.testimonial}"
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Estadísticas */}
+              <div className="mt-16 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-8">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+                  Resultados que Hablan por Sí Solos
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                  <div className="text-center">
+                    <div className="text-4xl font-bold text-blue-600 mb-2">500+</div>
+                    <div className="text-gray-600">Proyectos Completados</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl font-bold text-purple-600 mb-2">98%</div>
+                    <div className="text-gray-600">Satisfacción del Cliente</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl font-bold text-green-600 mb-2">24/7</div>
+                    <div className="text-gray-600">Soporte Técnico</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl font-bold text-orange-600 mb-2">15+</div>
+                    <div className="text-gray-600">Años de Experiencia</div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
