@@ -17,12 +17,25 @@ export const metadata: Metadata = {
   authors: [{ name: "Compumax" }],
   creator: "Compumax",
   publisher: "Compumax",
+  icons: {
+    icon: "/assets/logo.ico",
+    shortcut: "/assets/logo.ico",
+    apple: "/assets/logo.jpg",
+  },
   openGraph: {
     title: "Compumax - Diseño y Tecnología",
     description: "Publicidad que piensa. Tecnología que impulsa.",
     url: "https://compumax.com",
     siteName: "Compumax",
     type: "website",
+    images: [
+      {
+        url: "/assets/logo.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Compumax - Diseño y Tecnología",
+      },
+    ],
   },
 };
 
@@ -35,6 +48,7 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${poppins.className} antialiased`}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
