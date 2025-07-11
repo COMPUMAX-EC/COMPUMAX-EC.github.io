@@ -144,7 +144,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-semibold text-gray-900">Teléfono</p>
-                    <p className="text-gray-600">+593 99 999 9999</p>
+                    <p className="text-gray-600">+593 98 0494 770</p>
                   </div>
                 </div>
 
@@ -156,7 +156,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-semibold text-gray-900">Email</p>
-                    <p className="text-gray-600">info@compumax.com</p>
+                    <p className="text-gray-600">servicio.compumax@gmail.com</p>
                   </div>
                 </div>
 
@@ -169,7 +169,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-semibold text-gray-900">Ubicación</p>
-                    <p className="text-gray-600">Quito, Ecuador</p>
+                    <p className="text-gray-600">Tulcán, Ecuador</p>
                   </div>
                 </div>
               </div>
