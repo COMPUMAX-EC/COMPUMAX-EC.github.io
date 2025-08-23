@@ -1,0 +1,11 @@
+{
+  "name": "compumax-portfolio-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd geobas && npm install && npm run build",
+    "dev": "cd geobas && npm run dev",
+    "start": "cd geobas && npm run start"
+  },
+  "workspaces": ["geobas"]
+}

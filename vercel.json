@@ -1,7 +1,5 @@
 {
-  "buildCommand": "cd geobas && npm run build",
+  "buildCommand": "npm run build",
   "outputDirectory": "geobas/.next",
-  "devCommand": "cd geobas && npm run dev",
-  "installCommand": "cd geobas && npm install",
-  "rootDirectory": "geobas"
+  "installCommand": "npm install"
 }
