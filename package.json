@@ -1,11 +1,27 @@
 {
-  "name": "compumax-portfolio-root",
-  "version": "1.0.0",
+  "name": "geobas",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "cd geobas && npm install && npm run build",
-    "dev": "cd geobas && npm run dev",
-    "start": "cd geobas && npm run start"
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint"
   },
-  "workspaces": ["geobas"]
+  "dependencies": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "next": "15.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.0",
+    "@eslint/eslintrc": "^3"
+  }
 }
