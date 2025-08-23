@@ -1,0 +1,38 @@
+<svg width="400" height="250" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="apiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#11998e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#38ef7d;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="250" fill="url(#apiGrad)"/>
+  
+  <!-- Terminal window -->
+  <rect x="50" y="30" width="300" height="190" rx="8" fill="#1e1e1e"/>
+  <rect x="50" y="30" width="300" height="25" rx="8" fill="#333"/>
+  <circle cx="65" cy="42.5" r="3" fill="#ff5f57"/>
+  <circle cx="80" cy="42.5" r="3" fill="#ffbd2e"/>
+  <circle cx="95" cy="42.5" r="3" fill="#28ca42"/>
+  
+  <!-- Terminal content -->
+  <text x="60" y="75" font-family="Courier, monospace" font-size="10" fill="#38ef7d">$ curl -X GET /api/users</text>
+  <text x="60" y="90" font-family="Courier, monospace" font-size="10" fill="#fff">{</text>
+  <text x="70" y="105" font-family="Courier, monospace" font-size="10" fill="#fff">"status": "success",</text>
+  <text x="70" y="120" font-family="Courier, monospace" font-size="10" fill="#fff">"data": [</text>
+  <text x="80" y="135" font-family="Courier, monospace" font-size="10" fill="#fff">{"id": 1, "name": "John"},</text>
+  <text x="80" y="150" font-family="Courier, monospace" font-size="10" fill="#fff">{"id": 2, "name": "Jane"}</text>
+  <text x="70" y="165" font-family="Courier, monospace" font-size="10" fill="#fff">]</text>
+  <text x="60" y="180" font-family="Courier, monospace" font-size="10" fill="#fff">}</text>
+  
+  <text x="60" y="200" font-family="Courier, monospace" font-size="10" fill="#38ef7d">$ curl -X POST /api/users</text>
+  <text x="320" y="210" font-family="Courier, monospace" font-size="12" fill="#38ef7d">█</text>
+  
+  <!-- API endpoints visualization -->
+  <rect x="25" y="100" width="15" height="50" rx="3" fill="rgba(255,255,255,0.2)"/>
+  <text x="15" y="95" font-family="Arial, sans-serif" font-size="8" fill="white">GET</text>
+  <text x="10" y="130" font-family="Arial, sans-serif" font-size="8" fill="white">POST</text>
+  <text x="12" y="145" font-family="Arial, sans-serif" font-size="8" fill="white">PUT</text>
+  <text x="8" y="160" font-family="Arial, sans-serif" font-size="8" fill="white">DELETE</text>
+  
+  <text x="200" y="240" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">API Gateway</text>
+</svg>

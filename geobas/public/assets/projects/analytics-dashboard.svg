@@ -1,0 +1,49 @@
+<svg width="400" height="250" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="analyticsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="250" fill="url(#analyticsGrad)"/>
+  
+  <!-- Browser window -->
+  <rect x="30" y="20" width="340" height="210" rx="10" fill="white"/>
+  <rect x="30" y="20" width="340" height="30" rx="10" fill="#f1f1f1"/>
+  <circle cx="50" cy="35" r="4" fill="#ff5f57"/>
+  <circle cx="65" cy="35" r="4" fill="#ffbd2e"/>
+  <circle cx="80" cy="35" r="4" fill="#28ca42"/>
+  
+  <!-- Dashboard content -->
+  <text x="200" y="70" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#333">Analytics Dashboard</text>
+  
+  <!-- Stats cards -->
+  <rect x="50" y="90" width="70" height="40" rx="5" fill="#667eea"/>
+  <text x="85" y="105" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="white">Users</text>
+  <text x="85" y="120" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">12.5K</text>
+  
+  <rect x="135" y="90" width="70" height="40" rx="5" fill="#28ca42"/>
+  <text x="170" y="105" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="white">Revenue</text>
+  <text x="170" y="120" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">$89K</text>
+  
+  <rect x="220" y="90" width="70" height="40" rx="5" fill="#ff5f57"/>
+  <text x="255" y="105" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="white">Orders</text>
+  <text x="255" y="120" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">2.4K</text>
+  
+  <rect x="305" y="90" width="70" height="40" rx="5" fill="#ffbd2e"/>
+  <text x="340" y="105" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="white">Growth</text>
+  <text x="340" y="120" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">+24%</text>
+  
+  <!-- Chart -->
+  <rect x="50" y="150" width="300" height="60" rx="5" fill="#f8f9fa"/>
+  <polyline points="60,190 80,180 100,175 120,185 140,170 160,165 180,172 200,160 220,155 240,162 260,150 280,148 300,153 320,145 340,140" 
+            stroke="#667eea" stroke-width="3" fill="none"/>
+  
+  <!-- Chart dots -->
+  <circle cx="60" cy="190" r="2" fill="#667eea"/>
+  <circle cx="100" cy="175" r="2" fill="#667eea"/>
+  <circle cx="160" cy="165" r="2" fill="#667eea"/>
+  <circle cx="220" cy="155" r="2" fill="#667eea"/>
+  <circle cx="280" cy="148" r="2" fill="#667eea"/>
+  <circle cx="340" cy="140" r="2" fill="#667eea"/>
+</svg>

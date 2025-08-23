@@ -1,0 +1,42 @@
+<svg width="400" height="250" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="mobileGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff9a9e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fecfef;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="250" fill="url(#mobileGrad)"/>
+  
+  <!-- Phone mockup -->
+  <rect x="150" y="30" width="100" height="180" rx="20" fill="#2c2c2c"/>
+  <rect x="160" y="45" width="80" height="150" rx="8" fill="white"/>
+  
+  <!-- Status bar -->
+  <rect x="165" y="50" width="70" height="2" rx="1" fill="#e0e0e0"/>
+  
+  <!-- Header -->
+  <rect x="165" y="60" width="70" height="12" rx="2" fill="#667eea"/>
+  <text x="200" y="69" font-family="Arial, sans-serif" font-size="8" font-weight="bold" text-anchor="middle" fill="white">Tasks</text>
+  
+  <!-- Task items -->
+  <rect x="170" y="80" width="60" height="15" rx="3" fill="#f5f5f5"/>
+  <circle cx="175" cy="87.5" r="2" fill="#28ca42"/>
+  <rect x="182" y="85" width="30" height="2" rx="1" fill="#333"/>
+  <rect x="182" y="89" width="20" height="1.5" rx="1" fill="#999"/>
+  
+  <rect x="170" y="100" width="60" height="15" rx="3" fill="#f5f5f5"/>
+  <circle cx="175" cy="107.5" r="2" fill="#ff5f57"/>
+  <rect x="182" y="105" width="25" height="2" rx="1" fill="#333"/>
+  <rect x="182" y="109" width="35" height="1.5" rx="1" fill="#999"/>
+  
+  <rect x="170" y="120" width="60" height="15" rx="3" fill="#f5f5f5"/>
+  <circle cx="175" cy="127.5" r="2" fill="#ffbd2e"/>
+  <rect x="182" y="125" width="20" height="2" rx="1" fill="#333"/>
+  <rect x="182" y="129" width="25" height="1.5" rx="1" fill="#999"/>
+  
+  <!-- Add button -->
+  <circle cx="225" cy="175" r="12" fill="#667eea"/>
+  <path d="M219 175 h12 M225 169 v12" stroke="white" stroke-width="2"/>
+  
+  <text x="200" y="235" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">Task Manager</text>
+</svg>

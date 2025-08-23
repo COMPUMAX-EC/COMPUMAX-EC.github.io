@@ -1,0 +1,35 @@
+<svg width="400" height="250" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ecommerceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="250" fill="url(#ecommerceGrad)"/>
+  
+  <!-- Browser mockup -->
+  <rect x="40" y="40" width="320" height="180" rx="8" fill="white" opacity="0.95"/>
+  <rect x="40" y="40" width="320" height="25" rx="8" fill="#f0f0f0"/>
+  <circle cx="55" cy="52.5" r="4" fill="#ff5f57"/>
+  <circle cx="70" cy="52.5" r="4" fill="#ffbd2e"/>
+  <circle cx="85" cy="52.5" r="4" fill="#28ca42"/>
+  
+  <!-- Content -->
+  <rect x="60" y="80" width="80" height="60" rx="4" fill="#e0e0e0"/>
+  <rect x="150" y="80" width="80" height="60" rx="4" fill="#e0e0e0"/>
+  <rect x="240" y="80" width="80" height="60" rx="4" fill="#e0e0e0"/>
+  
+  <rect x="60" y="150" width="120" height="8" rx="4" fill="#d0d0d0"/>
+  <rect x="60" y="165" width="90" height="6" rx="3" fill="#d0d0d0"/>
+  
+  <rect x="200" y="150" width="120" height="8" rx="4" fill="#d0d0d0"/>
+  <rect x="200" y="165" width="100" height="6" rx="3" fill="#d0d0d0"/>
+  
+  <!-- Cart icon -->
+  <circle cx="300" cy="190" r="15" fill="#667eea"/>
+  <path d="M292 185 h16 l-2 10 h-12 z" fill="white"/>
+  <circle cx="296" cy="200" r="2" fill="white"/>
+  <circle cx="308" cy="200" r="2" fill="white"/>
+  
+  <text x="200" y="235" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">CTT Platform</text>
+</svg>
