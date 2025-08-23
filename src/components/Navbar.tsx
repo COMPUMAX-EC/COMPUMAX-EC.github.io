@@ -3,12 +3,24 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pathname = usePathname()
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
+  }
+
+  // Función para generar URLs correctas dependiendo de la página actual
+  const getNavLink = (section: string) => {
+    if (pathname === '/about') {
+      // Si estamos en about, llevamos a la página principal con la sección
+      return section === 'inicio' ? '/' : `/#${section}`
+    }
+    // Si estamos en la página principal, usamos anclas normales
+    return `#${section}`
   }
 
   return (
@@ -32,19 +44,19 @@ const Navbar = () => {
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
               <Link
-                href="#inicio"
+                href={getNavLink('inicio')}
                 className="text-white hover:text-[#e4eef5] px-3 py-2 text-sm font-medium transition-colors duration-200"
               >
                 Inicio
               </Link>
               <Link
-                href="#servicios"
+                href={getNavLink('servicios')}
                 className="text-white hover:text-[#e4eef5] px-3 py-2 text-sm font-medium transition-colors duration-200"
               >
                 Servicios
               </Link>
               <Link
-                href="#portafolio"
+                href={getNavLink('portafolio')}
                 className="text-white hover:text-[#e4eef5] px-3 py-2 text-sm font-medium transition-colors duration-200"
               >
                 Portafolio
@@ -56,7 +68,7 @@ const Navbar = () => {
                 Acerca de
               </Link>
               <Link
-                href="#contacto"
+                href={getNavLink('contacto')}
                 className="text-white hover:text-[#e4eef5] px-3 py-2 text-sm font-medium transition-colors duration-200"
               >
                 Contacto
@@ -91,28 +103,35 @@ const Navbar = () => {
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-[#0d4380] border-t border-[#1a5ba8]">
             <Link
-              href="#inicio"
+              href={getNavLink('inicio')}
               className="block text-white hover:text-[#e4eef5] px-3 py-2 text-base font-medium"
               onClick={toggleMenu}
             >
               Inicio
             </Link>
             <Link
-              href="#servicios"
+              href={getNavLink('servicios')}
               className="block text-white hover:text-[#e4eef5] px-3 py-2 text-base font-medium"
               onClick={toggleMenu}
             >
               Servicios
             </Link>
             <Link
-              href="#portafolio"
+              href={getNavLink('portafolio')}
               className="block text-white hover:text-[#e4eef5] px-3 py-2 text-base font-medium"
               onClick={toggleMenu}
             >
               Portafolio
             </Link>
             <Link
-              href="#contacto"
+              href="/about"
+              className="block text-white hover:text-[#e4eef5] px-3 py-2 text-base font-medium"
+              onClick={toggleMenu}
+            >
+              Acerca de
+            </Link>
+            <Link
+              href={getNavLink('contacto')}
               className="block text-white hover:text-[#e4eef5] px-3 py-2 text-base font-medium"
               onClick={toggleMenu}
             >

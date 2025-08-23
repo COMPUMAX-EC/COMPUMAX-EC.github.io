@@ -5,6 +5,7 @@
 // 1. IMPORTACIONES
 import React from 'react'           // React para componentes
 import Image from 'next/image'      // Componente optimizado de Next.js
+import Navbar from '@/components/Navbar'  // Componente de navegación
 
 // 2. INTERFAZ TYPESCRIPT (define la estructura de datos)
 interface TeamMember {
@@ -110,6 +111,9 @@ const AboutPage = () => {
   // 7. RENDER (JSX - HTML con JavaScript)
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Navbar */}
+      <Navbar />
+      
       {/* Header */}
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 text-center">
