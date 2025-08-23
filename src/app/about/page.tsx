@@ -63,43 +63,43 @@ const AboutPage = () => {
       name: "GAD Julio Andrade",
       logo: "/assets/clients/gadJulio.jpg",
       description: "Gobierno Autonomo Descentralizado",
-      project: "Desarrollo de aplicación web",
-      testimonial: "Compumax transformó nuestra idea en una realidad digital excepcional. Su equipo profesional y atención al detalle superaron nuestras expectativas."
+      project: "Señalética institucional y rótulos",
+      testimonial: "Agradecemos a Compumax por la excelente señalética institucional que diseñaron para nuestras oficinas. Los rótulos y letreros corporeos dan una imagen muy profesional a nuestra institución."
     },
     {
       name: "Credimax",
       logo: "/assets/clients/credimax.jpg", 
       description: "Cadena de Almacenes",
-      project: "Sistema de pedidos online",
-      testimonial: "Gracias a Compumax, nuestros pedidos online aumentaron un 25%. La plataforma es intuitiva y nuestros clientes están encantados."
+      project: "Rótulos luminosos y material POP",
+      testimonial: "Los rótulos luminosos y el material publicitario que nos diseñaron han mejorado notablemente la visibilidad de nuestras tiendas. ¡Excelente trabajo en diseño gráfico!"
     },
     {
       name: "GAD Municipal Sucumbios",
       logo: "/assets/clients/gadSucumbios.jpg",
       description: "Gobierno Autónomo Descentralizado",
-      project: "Sistema de citas médicas",
-      testimonial: "La automatización de nuestro sistema de citas nos ha permitido enfocarnos en lo que mejor hacemos: cuidar a nuestros pacientes."
+      project: "Reconocimientos y trofeos personalizados",
+      testimonial: "Los reconocimientos y trofeos personalizados que elaboraron para nuestros eventos cívicos fueron perfectos. La calidad del grabado láser es excepcional."
     },
     {
       name: "Junta Administradora de Agua Potable Julio Andrade",
       logo: "/assets/clients/junta_agua_julio.jpeg",
-      description: "Tienda ecológica",
-      project: "E-commerce completo",
-      testimonial: "Nuestro e-commerce desarrollado por Compumax nos ha permitido llegar a más clientes y multiplicar nuestras ventas."
+      description: "Junta de Agua Potable",
+      project: "Souvenirs y merchandising institucional",
+      testimonial: "Los souvenirs y productos promocionales que diseñaron representan perfectamente nuestra institución. Muy agradecidos por su creatividad y profesionalismo."
     },
     {
       name: "Comercial Tío Tarqui",
       logo: "/assets/clients/tarqui.png",
       description: "Cadena de tiendas",
-      project: "Plataforma de aprendizaje",
-      testimonial: "La plataforma educativa que crearon ha revolucionado la forma en que enseñamos y nuestros estudiantes aprenden."
+      project: "Estampados textiles y uniformes",
+      testimonial: "Los estampados en nuestros uniformes y camisetas promocionales quedaron increíbles. La técnica de estampado digital que utilizan es de alta calidad."
     },
     {
       name: "Team Montañeros 04",
       logo: "/assets/clients/montañeros.jpg",
       description: "Club de ciclismo",
-      project: "Sistema de rastreo",
-      testimonial: "El sistema de rastreo nos ha dado total control sobre nuestras operaciones. Excelente trabajo del equipo de Compumax."
+      project: "Corte láser y diseño de medallas",
+      testimonial: "Las medallas y reconocimientos cortados con láser para nuestras competencias son impresionantes. El diseño personalizado refleja perfectamente el espíritu de nuestro club."
     }
   ]
 
