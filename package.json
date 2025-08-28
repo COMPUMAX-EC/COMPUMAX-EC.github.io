@@ -1,10 +1,11 @@
 {
-  "name": "geobas",
+  "name": "geobas-portfolio",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "next build --turbopack", 
+    "vercel-build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
