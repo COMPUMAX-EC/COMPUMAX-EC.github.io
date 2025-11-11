@@ -4,6 +4,30 @@ import React from 'react'
 import Image from 'next/image'
 
 const Contact = () => {
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Prevent hydration mismatch from iframe getting modified by browser extensions
+  if (!mounted) {
+    return (
+      <section id="contacto" className="section-padding bg-[#e4eef5]">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-[#0d4380] mb-4">
+              Contáctanos
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Estamos aquí para ayudarte a hacer realidad tu proyecto
+            </p>
+          </div>
+          <div className="h-96" aria-hidden="true" />
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section id="contacto" className="section-padding bg-[#e4eef5]">
@@ -108,7 +132,7 @@ const Contact = () => {
                 Chatea con nosotros directamente para una respuesta más rápida
               </p>
               <a
-                href="https://wa.me/593999999999?text=Hola,%20me%20interesa%20conocer%20más%20sobre%20sus%20servicios"
+                href="https://wa.me/593980494770?text=Buenas%20tardes%2C%20quisiera%20solicitar%20informaci%C3%B3n%20para%20mandar%20a%20hacer%20un%20r%C3%B3tulo.%20%C2%BFPodr%C3%ADan%20ayudarme%3F"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors duration-300"
@@ -131,7 +155,7 @@ const Contact = () => {
               </h3>
               <div className="flex justify-center space-x-6">
                 <a
-                  href="#"
+                  href="https://www.facebook.com/AgenciaCompumax"
                   className="w-12 h-12 rounded-full overflow-hidden hover:scale-110 transition-transform duration-300"
                 >
                   <Image
@@ -142,7 +166,7 @@ const Contact = () => {
                   />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.instagram.com/compumax.ec/"
                   className="w-12 h-12 rounded-full overflow-hidden hover:scale-110 transition-transform duration-300"
                 >
                   <Image
@@ -153,7 +177,7 @@ const Contact = () => {
                   />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.tiktok.com/@agencia.compumax?lang=en"
                   className="w-12 h-12 rounded-full overflow-hidden hover:scale-110 transition-transform duration-300"
                 >
                   <Image
