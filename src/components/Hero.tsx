@@ -5,9 +5,23 @@ const Hero = () => {
   return (
     <section 
       id="inicio" 
-      className="min-h-screen flex items-center pt-16 bg-gradient-to-br from-[#0d4380] to-[#1a5ba8]"
+      className="relative min-h-screen flex items-center pt-16 overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      {/* Imagen de Fondo */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/assets/Rotulos/fachada.jpg"
+          alt="Fachada Compumax"
+          fill
+          priority
+          className="object-cover"
+        />
+        {/* Capa de transparencia (Overlay) */}
+        {/* Ajusta el opacity-80 para más o menos transparencia (90 es más oscuro, 70 más claro) */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0d4380]/90 to-[#1a5ba8]/80 backdrop-blur-[2px]"></div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="space-y-8">
           {/* Logo */}
           <div className="flex justify-center">
@@ -22,14 +36,14 @@ const Hero = () => {
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+          <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight drop-shadow-lg">
             Publicidad que piensa.
             <br />
             <span className="text-yellow-300">Tecnología que impulsa.</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-white/95 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
             Diseño gráfico, desarrollo web y automatización digital para tu negocio.
           </p>
 
@@ -43,7 +57,7 @@ const Hero = () => {
             </a>
             <a
               href="#servicios"
-              className="text-white border-2 border-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-[#0d4380] transition-all duration-300 hover:scale-105"
+              className="text-white border-2 border-white px-8 py-4 rounded-lg font-semibold bg-white/10 backdrop-blur-sm hover:bg-white hover:text-[#0d4380] transition-all duration-300 hover:scale-105"
             >
               Nuestros Servicios
             </a>
