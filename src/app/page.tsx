@@ -975,7 +975,7 @@ export default function Portfolio() {
                   </svg>
                 </div>
                 <h3 className="text-white font-semibold mb-2 font-body text-center">Email</h3>
-                <p className="text-gray-400 group-hover:text-purple-300 transition-colors duration-300 font-body text-center">geobas@email.com</p>
+                <p className="text-gray-400 group-hover:text-purple-300 transition-colors duration-300 font-body text-center">geovanny.basantesq@gmail.com</p>
               </div>
               
               {/* LinkedIn */}
@@ -986,7 +986,7 @@ export default function Portfolio() {
                   </svg>
                 </div>
                 <h3 className="text-white font-semibold mb-2 font-body text-center">LinkedIn</h3>
-                <p className="text-gray-400 group-hover:text-purple-300 transition-colors duration-300 font-body text-center">linkedin.com/in/geobas</p>
+                <p className="text-gray-400 group-hover:text-purple-300 transition-colors duration-300 font-body text-center">https://www.linkedin.com/in/geovanny-basantes-0471b123a/s</p>
               </div>
               
               {/* GitHub */}
@@ -997,7 +997,7 @@ export default function Portfolio() {
                   </svg>
                 </div>
                 <h3 className="text-white font-semibold mb-2 font-body text-center">GitHub</h3>
-                <p className="text-gray-400 group-hover:text-purple-300 transition-colors duration-300 font-body text-center">github.com/geobas</p>
+                <p className="text-gray-400 group-hover:text-purple-300 transition-colors duration-300 font-body text-center">https://github.com/COMPUMAX-EC</p>
               </div>
             </div>
             
