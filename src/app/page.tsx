@@ -55,28 +55,28 @@ export default function Portfolio() {
     },
     {
       id: 2,
-      title: "Task Management App",
+      title: "DevIAthon",
       description: "Aplicación de gestión de tareas con colaboración en tiempo real",
       technologies: ["Vue.js", "TypeScript", "Firebase", "Tailwind CSS"],
       githubUrl: "https://github.com/geobas",
       liveUrl: "https://tasks.demo.com",
       category: "web",
-      image: "/assets/projects/task-manager.svg"
+      image: "/assets/projects/deviathon.jpg"
     },
     {
       id: 3,
-      title: "Analytics Dashboard",
+      title: "SCADA HIDROMIRA",
       description: "Dashboard analítico con visualizaciones interactivas y reportes",
       technologies: ["Next.js", "D3.js", "Python", "FastAPI"],
       githubUrl: "https://github.com/geobas",
       liveUrl: "https://analytics.demo.com",
       category: "web",
-      image: "/assets/projects/analytics-dashboard.svg"
+      image: "/assets/projects/SCADA.png"
     },
     {
       id: 4,
-      title: "API Gateway",
-      description: "Gateway de APIs escalable con autenticación y rate limiting",
+      title: "Sistema Control Ganado",
+      description: "Control ganadero mediante identificación por aretes ",
       technologies: ["Node.js", "Express", "Redis", "JWT"],
       githubUrl: "https://github.com/geobas",
       category: "tool",
@@ -84,8 +84,8 @@ export default function Portfolio() {
     },
     {
       id: 5,
-      title: "Chat Application",
-      description: "Aplicación de chat en tiempo real con Socket.io",
+      title: "Sistema de Riego Valvulas Inteligentes",
+      description: "Sistema de riego automatizado con control inteligente de válvulas",
       technologies: ["React", "Socket.io", "MongoDB", "Express"],
       githubUrl: "https://github.com/geobas",
       liveUrl: "https://chat.demo.com",
@@ -94,7 +94,7 @@ export default function Portfolio() {
     },
     {
       id: 6,
-      title: "DevOps Toolkit",
+      title: "Plataforma de Institucion Financiera Santa Téresita",
       description: "Herramientas de automatización para desarrollo y despliegue",
       technologies: ["Docker", "Kubernetes", "Jenkins", "AWS"],
       githubUrl: "https://github.com/geobas",
