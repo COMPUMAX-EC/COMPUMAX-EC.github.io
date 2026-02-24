@@ -450,7 +450,7 @@ export default function Portfolio() {
                     Contacto
                   </a>
                   <a
-                    href="/cv.pdf"
+                    href="/assets/CV GeovannyB.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-purple-400 hover:text-purple-300 px-3 py-2 text-sm font-semibold transition-all duration-200 hover:-translate-y-1 hover:scale-105 font-body flex items-center gap-2"
