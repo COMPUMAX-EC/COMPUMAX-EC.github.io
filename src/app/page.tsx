@@ -1008,7 +1008,7 @@ export default function Portfolio() {
               className="group inline-flex items-center gap-3 px-8 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 font-semibold text-lg hover:-translate-y-1 hover:shadow-lg hover:shadow-green-500/30 animate-fadeInUp animation-delay-600 font-body"
             >
               ¡Charlemos!
-              <span className="group-hover:translate-x-1 transition-transform duration-300"><Whatsapp></Whatsapp></span>
+              <span className="group-hover:translate-x-1 transition-transform duration-300">💬</span>
             </a>
           </div>
         </section>
