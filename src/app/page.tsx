@@ -1002,11 +1002,13 @@ export default function Portfolio() {
             </div>
             
             <a
-              href="mailto:geobas@email.com"
-              className="group inline-flex items-center gap-3 px-8 py-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all duration-300 font-semibold text-lg hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-500/30 animate-fadeInUp animation-delay-600 font-body"
+              href="https://api.whatsapp.com/send?phone=593980069844&text=%C2%A1Charlemos!%20Me%20interesa%20conversar%20sobre%20un%20proyecto.%20%C2%BFCu%C3%A1ndo%20te%20queda%20bien%3F"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-3 px-8 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 font-semibold text-lg hover:-translate-y-1 hover:shadow-lg hover:shadow-green-500/30 animate-fadeInUp animation-delay-600 font-body"
             >
               ¡Charlemos!
-              <span className="group-hover:translate-x-1 transition-transform duration-300">💬</span>
+              <span className="group-hover:translate-x-1 transition-transform duration-300"><Whatsapp></Whatsapp></span>
             </a>
           </div>
         </section>
