@@ -62,6 +62,12 @@ const Navbar = () => {
                 Portafolio
               </Link>
               <Link
+                href="/catalogo-navidad/"
+                className="text-white hover:text-[#e4eef5] px-3 py-2 text-sm font-medium transition-colors duration-200"
+              >
+                Catálogo
+              </Link>
+              <Link
                 href="/about"
                 className="text-white hover:text-[#e4eef5] px-3 py-2 text-sm font-medium transition-colors duration-200"
               >
@@ -122,6 +128,13 @@ const Navbar = () => {
               onClick={toggleMenu}
             >
               Portafolio
+            </Link>
+            <Link
+              href="/catalogo-navidad/"
+              className="block text-white hover:text-[#e4eef5] px-3 py-2 text-base font-medium"
+              onClick={toggleMenu}
+            >
+              Catálogo
             </Link>
             <Link
               href="/about"

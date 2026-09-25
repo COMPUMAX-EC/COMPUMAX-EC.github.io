@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next"
+import FloatingWhatsApp from "@/components/FloatingWhatsApp"
 
 
 const poppins = Poppins({
@@ -48,6 +49,7 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${poppins.className} antialiased`}>
         {children}
+        <FloatingWhatsApp />
         <Analytics />
       </body>
     </html>
