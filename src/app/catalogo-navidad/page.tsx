@@ -29,20 +29,20 @@ export default function CatalogoNavidadPage() {
 
   return (
     <main className="min-h-screen bg-[#062f2a] text-[#f9f1c7] selection:bg-[#f7c34d] selection:text-[#062f2a]">
-      <div className="mx-auto min-h-screen max-w-md border-x border-[#2c7666] bg-[#073b34] px-3 pb-6 shadow-2xl">
-        <header className="sticky top-0 z-10 -mx-3 border-b border-[#2d7566] bg-[#073b34]/95 px-3 pb-3 pt-3 backdrop-blur">
+      <div className="mx-auto min-h-screen max-w-md border-x border-[#2d6fa3] bg-[#073b34] px-3 pb-6 shadow-2xl">
+        <header className="sticky top-0 z-10 -mx-3 border-b border-[#2d6fa3] bg-[#073b34]/95 px-3 pb-3 pt-3 backdrop-blur">
           <div className="flex items-center justify-between gap-3">
-            <a href="/" className="text-lg font-bold tracking-tight text-[#f7c34d]">happy-day</a>
-            <label className="flex min-w-0 flex-1 items-center rounded-full border border-[#377d6c] bg-[#0b4a3f] px-3 text-xs text-[#9bc1ad]">
+            <a href="/" className="text-lg font-bold tracking-tight text-[#f7c34d]">Compumax</a>
+            <label className="flex min-w-0 flex-1 items-center rounded-full border border-[#3d83b8] bg-[#0b4265] px-3 text-xs text-[#9bc1ad]">
               <span className="sr-only">Buscar productos</span>
               <input className="w-full bg-transparent py-1.5 outline-none placeholder:text-[#9bc1ad]" placeholder="Buscar producto o código" />
             </label>
-            <a href="/" aria-label="Cerrar catálogo" className="rounded-full border border-[#377d6c] px-2 py-1 text-sm text-[#b9d3bc]">×</a>
+            <a href="/" aria-label="Cerrar catálogo" className="rounded-full border border-[#3d83b8] px-2 py-1 text-sm text-[#b9d3bc]">×</a>
           </div>
           <p className="mt-1 text-center text-[10px] text-[#9bc1ad]">Página 3 de 12 · Catálogo de Navidad</p>
           <div className="mt-2 flex gap-1.5 overflow-x-auto pb-0.5">
             {filters.map((item) => (
-              <button key={item} onClick={() => setFilter(item)} className={`whitespace-nowrap rounded-full border px-3 py-1 text-[10px] transition ${filter === item ? 'border-[#f7c34d] bg-[#f7c34d] font-semibold text-[#073b34]' : 'border-[#377d6c] text-[#a9c8b2] hover:border-[#f7c34d]'}`}>
+              <button key={item} onClick={() => setFilter(item)} className={`whitespace-nowrap rounded-full border px-3 py-1 text-[10px] transition ${filter === item ? 'border-[#f7c34d] bg-[#f7c34d] font-semibold text-[#073b34]' : 'border-[#3d83b8] text-[#a9c8b2] hover:border-[#f7c34d]'}`}>
                 {item}
               </button>
             ))}
@@ -52,7 +52,7 @@ export default function CatalogoNavidadPage() {
         <section className="grid grid-cols-2 gap-x-3 gap-y-4 pt-4" aria-label="Productos navideños">
           {products.map((product, index) => (
             <button key={`${product.name}-${index}`} onClick={() => { setSelected(product); setQuantity(1) }} className="group text-left">
-              <div className="overflow-hidden rounded-lg border border-[#5d9879] bg-[#0a5144] shadow-[0_5px_20px_rgba(0,0,0,.18)]">
+              <div className="overflow-hidden rounded-lg border border-[#438bc0] bg-[#0a466b] shadow-[0_5px_20px_rgba(0,0,0,.18)]">
                 <img src={product.image} alt={`Vista de ${product.name}`} className="aspect-[4/5] w-full object-cover object-top transition duration-300 group-hover:scale-105" />
               </div>
               <h2 className="mt-1.5 text-sm font-semibold leading-tight">{product.name}</h2>
@@ -61,7 +61,7 @@ export default function CatalogoNavidadPage() {
           ))}
         </section>
 
-        <footer className="mt-6 flex items-center justify-between rounded-lg border border-[#4d9878] bg-[#0d4b40] px-3 py-2">
+        <footer className="mt-6 flex items-center justify-between rounded-lg border border-[#438bc0] bg-[#0d4665] px-3 py-2">
           <div><strong className="block text-base text-[#f8f3d6]">${cartTotal.toFixed(2).replace('.', ',')}</strong><span className="text-[10px] text-[#a9c8b2]">{cartCount} artículos</span></div>
           <button onClick={() => setSelected(products[4])} className="rounded-lg bg-[#f7c34d] px-4 py-2 text-xs font-bold text-[#073b34] shadow hover:bg-[#ffd66f]">🛒 Ver carrito</button>
         </footer>
@@ -69,10 +69,10 @@ export default function CatalogoNavidadPage() {
 
       {selected && (
         <div className="fixed inset-0 z-20 flex items-end justify-center bg-black/65 p-0 sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-label={`Detalle de ${selected.name}`}>
-          <div className="w-full max-w-md overflow-hidden rounded-t-2xl border border-[#4d9878] bg-[#073b34] sm:rounded-2xl">
-            <div className="relative h-64 bg-[#0a5144]"><img src={selected.image} alt={`Detalle de ${selected.name}`} className="h-full w-full object-cover object-top" /><button onClick={() => setSelected(null)} aria-label="Cerrar detalle" className="absolute right-3 top-3 rounded-full bg-[#073b34]/85 px-3 py-1 text-lg">×</button></div>
+          <div className="w-full max-w-md overflow-hidden rounded-t-2xl border border-[#438bc0] bg-[#073b34] sm:rounded-2xl">
+            <div className="relative h-64 bg-[#0a466b]"><img src={selected.image} alt={`Detalle de ${selected.name}`} className="h-full w-full object-cover object-top" /><button onClick={() => setSelected(null)} aria-label="Cerrar detalle" className="absolute right-3 top-3 rounded-full bg-[#073b34]/85 px-3 py-1 text-lg">×</button></div>
             <div className="p-4"><p className="text-[10px] uppercase tracking-widest text-[#9bc1ad]">{selected.category}</p><h2 className="mt-1 text-2xl font-bold text-[#f7c34d]">{selected.name}</h2><p className="mt-1 text-sm text-[#d4e0c5]">Diseño navideño listo para personalizar y sumar a tu decoración.</p>
-              <div className="mt-4 flex items-center justify-between"><span className="text-sm text-[#a9c8b2]">Cantidad</span><div className="flex items-center rounded-lg border border-[#4d9878]"><button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-3 py-2">−</button><span className="border-x border-[#4d9878] px-4 py-2 text-sm">{quantity}</span><button onClick={() => setQuantity(quantity + 1)} className="px-3 py-2">+</button></div></div>
+              <div className="mt-4 flex items-center justify-between"><span className="text-sm text-[#a9c8b2]">Cantidad</span><div className="flex items-center rounded-lg border border-[#438bc0]"><button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-3 py-2">−</button><span className="border-x border-[#438bc0] px-4 py-2 text-sm">{quantity}</span><button onClick={() => setQuantity(quantity + 1)} className="px-3 py-2">+</button></div></div>
               <button onClick={() => addToCart(selected.price)} className="mt-4 w-full rounded-lg bg-[#f7c34d] py-3 text-sm font-bold text-[#073b34]">Añadir al carrito · ${selected.price}</button>
             </div>
           </div>
