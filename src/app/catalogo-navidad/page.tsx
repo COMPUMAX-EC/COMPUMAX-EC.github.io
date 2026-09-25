@@ -38,7 +38,7 @@ function parseCsv(csv: string): CatalogProduct[] {
     .filter((row) => value(row, ['nombre', 'name']))
     .map((row) => ({
       name: value(row, ['nombre', 'name']),
-      category: value(row, ['categoria', 'category']) || 'Navidad',
+      category: value(row, ['categoria', 'category']) || 'Otros',
       price: value(row, ['precio', 'price']),
       image: value(row, ['imagen', 'image', 'url_imagen']),
       description: value(row, ['descripcion', 'description']),
