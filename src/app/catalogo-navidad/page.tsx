@@ -1,6 +1,6 @@
 import CatalogoClient, { type CatalogProduct } from './CatalogoClient'
 
-const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1HPw5nfotD-EQL7X25Z8upkbMyc9haz_7ly2dil-zi60/export?format=csv&gid=0'
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRiCzFhJgb7KD9sZogvjlSWRegq0UAxmjvFCub_dO0l6hTusku93ScNY0hVxZ2BQ8924ZnadV__jphJ/pub?gid=0&single=true&output=csv'
 
 const fallbackProducts: CatalogProduct[] = [
   { name: 'Carrusel navideño', category: 'Decoración', price: '49,97', image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-wyHyYOHBwj4magpsdQncEY0wKBHXqt.png' },
@@ -11,10 +11,39 @@ const fallbackProducts: CatalogProduct[] = [
 ]
 
 function parseCsv(csv: string): CatalogProduct[] {
-  const rows = csv.trim().split(/\r?\n/).map((row) => row.match(/("(?:[^"]|"")*"|[^,]*)/g)?.filter((cell) => cell !== undefined).map((cell) => cell.replace(/^"|"$/g, '').replace(/""/g, '')) || [])
-  const headers = (rows.shift() || []).map((header) => header.trim().toLowerCase())
+  const rows = csv.trim().split(/\r?\n/).map((line) => {
+    const cells: string[] = []
+    let cell = ''
+    let quoted = false
+    for (let index = 0; index < line.length; index += 1) {
+      const character = line[index]
+      if (character === '"' && line[index + 1] === '"' && quoted) {
+        cell += '"'
+        index += 1
+      } else if (character === '"') {
+        quoted = !quoted
+      } else if (character === ',' && !quoted) {
+        cells.push(cell.trim())
+        cell = ''
+      } else {
+        cell += character
+      }
+    }
+    cells.push(cell.trim())
+    return cells
+  })
+  const headers = (rows.shift() || []).map((header) => header.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, ''))
   const value = (row: string[], keys: string[]) => row[headers.findIndex((header) => keys.includes(header))] || ''
-  return rows.filter((row) => value(row, ['nombre', 'name'])).map((row) => ({ name: value(row, ['nombre', 'name']), category: value(row, ['categoria', 'categoría', 'category']) || 'Navidad', price: value(row, ['precio', 'price']), image: value(row, ['imagen', 'image', 'url_imagen']), description: value(row, ['descripcion', 'descripción', 'description']) })).filter((product) => product.price && product.image)
+  return rows
+    .filter((row) => value(row, ['nombre', 'name']))
+    .map((row) => ({
+      name: value(row, ['nombre', 'name']),
+      category: value(row, ['categoria', 'category']) || 'Navidad',
+      price: value(row, ['precio', 'price']),
+      image: value(row, ['imagen', 'image', 'url_imagen']),
+      description: value(row, ['descripcion', 'description']),
+    }))
+    .filter((product) => product.price && product.image)
 }
 
 export default async function CatalogoNavidadPage() {
