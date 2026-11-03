@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Compumax · Sitio web de la agencia
 
-## Getting Started
+Sitio web oficial de **Compumax**, agencia de diseño y publicidad de **Tulcán, Ecuador**. Muestra los servicios
+de la agencia, su portafolio y clientes, y permite a cualquier persona cotizar o escribir por WhatsApp en un clic.
 
-First, run the development server:
+**Sitio en línea:** https://compumax-ec-github-io.vercel.app
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Para qué sirve
+
+- Presentar los servicios: **corte láser** en madera y otros materiales, **estampado textil**, **sublimación**,
+  **letras corpóreas**, **rótulos empresariales**, **señalética** interior y **reconocimientos** (trofeos y placas).
+- Mostrar el **portafolio** de trabajos y una franja de **clientes** que ya confían en la agencia.
+- Ofrecer un **catálogo de Navidad** con carrito para armar pedidos de temporada.
+- Facilitar el contacto: botón flotante de **WhatsApp**, teléfono, correo y ubicación.
+
+## Detalles técnicos
+
+| Capa | Tecnología |
+|---|---|
+| Framework | Next.js 15 (App Router) + React 19 |
+| Lenguaje | TypeScript |
+| Estilos | Tailwind CSS |
+| Analítica | Vercel Analytics |
+| Despliegue | Vercel (cada push a `main` publica) |
+
+```
+src/app/                 páginas: inicio, /about, /catalogo-navidad
+src/components/          Navbar, Hero, Services, Portfolio, ClientMarquee, Contact, Footer, FloatingWhatsApp
+public/assets/           fotos de trabajos, clientes y señaléticas
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Ejecutar localmente
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # compilación de producción
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## In English
 
-## Learn More
+Website of Compumax, a design and advertising agency in Tulcán, Ecuador: services (laser cutting, textile printing,
+signage, corporate lettering), portfolio, a Christmas catalogue with a cart, and one-click WhatsApp contact.
+Built with Next.js 15, React 19, TypeScript and Tailwind CSS, deployed on Vercel.
 
-To learn more about Next.js, take a look at the following resources:
+## Licencia
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+El código está bajo licencia [MIT](LICENSE). El nombre, logotipo y fotografías de Compumax y de sus clientes no
+forman parte de la licencia.
