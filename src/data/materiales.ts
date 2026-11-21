@@ -11,7 +11,7 @@ export type SheetMaterial = {
 export const SHEET_WIDTH_CM = 120
 export const SHEET_HEIGHT_CM = 240
 
-/** Precio por minuto de corte láser, en USD. Pendiente de confirmar por Compumax. */
+/** Precio por minuto de corte láser, en USD (confirmado por Compumax, 2026-11-21). */
 export const CUT_PRICE_PER_MINUTE = 0.5
 
 export const sheetMaterials: SheetMaterial[] = [
