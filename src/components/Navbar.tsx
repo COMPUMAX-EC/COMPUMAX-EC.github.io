@@ -15,8 +15,8 @@ const Navbar = () => {
 
   // Función para generar URLs correctas dependiendo de la página actual
   const getNavLink = (section: string) => {
-    if (pathname === '/about') {
-      // Si estamos en about, llevamos a la página principal con la sección
+    if (pathname !== '/') {
+      // Si estamos en otra página, llevamos a la página principal con la sección
       return section === 'inicio' ? '/' : `/#${section}`
     }
     // Si estamos en la página principal, usamos anclas normales
@@ -66,6 +66,12 @@ const Navbar = () => {
                 className="text-white hover:text-[#e4eef5] px-3 py-2 text-sm font-medium transition-colors duration-200"
               >
                 Catálogo
+              </Link>
+              <Link
+                href="/cotizar"
+                className="text-white hover:text-[#e4eef5] px-3 py-2 text-sm font-medium transition-colors duration-200"
+              >
+                Cotizar
               </Link>
               <Link
                 href="/about"
@@ -135,6 +141,13 @@ const Navbar = () => {
               onClick={toggleMenu}
             >
               Catálogo
+            </Link>
+            <Link
+              href="/cotizar"
+              className="block text-white hover:text-[#e4eef5] px-3 py-2 text-base font-medium"
+              onClick={toggleMenu}
+            >
+              Cotizar
             </Link>
             <Link
               href="/about"
