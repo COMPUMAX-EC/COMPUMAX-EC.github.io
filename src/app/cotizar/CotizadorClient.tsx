@@ -10,10 +10,12 @@ import {
   sheetMaterials,
 } from '@/data/materiales'
 import { DOZEN_QTY, priceCategories, unitPriceFor, type PriceCategory, type PriceItem } from '@/data/catalogo-precios'
+import PriceIcon, { type IconName } from '@/components/PriceIcon'
 
 const WHATSAPP_NUMBER = '593980494770'
 const CUSTOM = 'personalizada'
 const SHEETS_TAB = 'planchas'
+const SHEETS_IMAGE = '/assets/reconocimientos/reconocimiento (5).jpg'
 
 export type QuoteLine = {
   key: string
@@ -23,6 +25,7 @@ export type QuoteLine = {
   from?: boolean
 }
 
+const assetUrl = (path: string) => encodeURI(path)
 const money = (value: number) => `$${value.toFixed(2)}`
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
 
@@ -51,7 +54,10 @@ export default function CotizadorClient() {
   }
 
   const category = priceCategories.find((item) => item.id === tab)
-  const tabs = [{ id: SHEETS_TAB, name: 'Planchas y corte láser' }, ...priceCategories.map(({ id, name }) => ({ id, name }))]
+  const tabs: Array<{ id: string; name: string; icon: IconName }> = [
+    { id: SHEETS_TAB, name: 'Planchas y corte láser', icon: 'sheet' },
+    ...priceCategories.map(({ id, name, icon }) => ({ id, name, icon })),
+  ]
 
   return (
     <main className="mx-auto max-w-6xl px-4 pb-16 pt-24 sm:px-6 lg:px-8" id="cotizar">
@@ -72,8 +78,9 @@ export default function CotizadorClient() {
               type="button"
               onClick={() => setTab(item.id)}
               aria-pressed={item.id === tab}
-              className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm transition ${item.id === tab ? 'border-[#0d4380] bg-[#0d4380] font-semibold text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-[#1a5ba8]'}`}
+              className={`flex items-center gap-2 whitespace-nowrap rounded-full border px-4 py-2 text-sm transition ${item.id === tab ? 'border-[#0d4380] bg-[#0d4380] font-semibold text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-[#1a5ba8]'}`}
             >
+              <PriceIcon name={item.icon} className="h-4 w-4" />
               {item.name}
             </button>
           ))}
@@ -81,7 +88,15 @@ export default function CotizadorClient() {
       </nav>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
-        <div>{category ? <CategoryList category={category} onAdd={addLine} /> : <SheetCalculator onAdd={addLine} />}</div>
+        <div className="space-y-6">
+          <CategoryBanner
+            icon={category?.icon ?? 'sheet'}
+            image={category?.image ?? SHEETS_IMAGE}
+            title={category?.name ?? 'Planchas y corte láser'}
+            subtitle={category ? `${category.items.length} productos · precio por unidad y por docena` : 'MDF, acrílico, sintra, coroplast y foam board por plancha, media plancha o A3'}
+          />
+          {category ? <CategoryList category={category} onAdd={addLine} /> : <SheetCalculator onAdd={addLine} />}
+        </div>
 
         <aside className="h-fit rounded-2xl bg-[#0d4380] p-5 text-white shadow-lg lg:sticky lg:top-24" aria-label="Tu cotización">
           <h2 className="text-lg font-semibold">Tu cotización</h2>
@@ -126,7 +141,7 @@ function CategoryList({ category, onAdd }: { category: PriceCategory; onAdd: (li
   return (
     <section className="rounded-2xl bg-white p-5 shadow-sm" aria-labelledby="categoria-title">
       <div className="flex flex-wrap items-end justify-between gap-3">
-        <h2 id="categoria-title" className="text-lg font-semibold text-[#0d4380]">{category.name}</h2>
+        <h2 id="categoria-title" className="text-lg font-semibold text-[#0d4380]">Lista de precios</h2>
         {hasDozen && (
           <div className="flex gap-4 text-xs text-gray-600">
             <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-sm bg-[#9dbad6]" />Unidad</span>
@@ -163,7 +178,8 @@ function PriceRow({ item, maxPrice, onAdd }: { item: PriceItem; maxPrice: number
   }
 
   return (
-    <li className="grid gap-3 py-4 sm:grid-cols-[1fr_auto] sm:items-center">
+    <li className="grid grid-cols-[56px_1fr] gap-x-3 gap-y-3 py-4 sm:grid-cols-[56px_1fr_auto] sm:items-center">
+      <ProductThumb item={item} />
       <div className="min-w-0">
         <p className="font-semibold text-gray-800">{item.name}</p>
         <p className="text-xs text-gray-500">
@@ -189,7 +205,7 @@ function PriceRow({ item, maxPrice, onAdd }: { item: PriceItem; maxPrice: number
         )}
       </div>
       {price !== undefined ? (
-        <div className="flex items-center gap-2">
+        <div className="col-span-2 flex items-center gap-2 sm:col-span-1">
           <label className="sr-only" htmlFor={`qty-${item.code}`}>Cantidad de {item.name}</label>
           <input
             id={`qty-${item.code}`}
@@ -208,12 +224,39 @@ function PriceRow({ item, maxPrice, onAdd }: { item: PriceItem; maxPrice: number
           href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola Compumax, quiero cotizar: ${item.name}`)}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="whitespace-nowrap rounded-lg border border-[#0d4380] px-3 py-2 text-center text-sm font-semibold text-[#0d4380] hover:bg-[#e4eef5]"
+          className="col-span-2 whitespace-nowrap rounded-lg border border-[#0d4380] px-3 py-2 text-center text-sm font-semibold text-[#0d4380] hover:bg-[#e4eef5] sm:col-span-1"
         >
           Consultar
         </a>
       )}
     </li>
+  )
+}
+
+function CategoryBanner({ icon, image, title, subtitle }: { icon: IconName; image: string; title: string; subtitle: string }) {
+  return (
+    <section className="relative isolate h-40 overflow-hidden rounded-2xl bg-[#0d4380] shadow-sm sm:h-48">
+      <img src={assetUrl(image)} alt={`Trabajo de Compumax: ${title}`} className="absolute inset-0 -z-10 h-full w-full object-cover" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#0d4380]/95 via-[#0d4380]/70 to-transparent" />
+      <div className="flex h-full flex-col justify-end p-5 text-white">
+        <span className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
+          <PriceIcon name={icon} />
+        </span>
+        <h2 className="text-2xl font-bold">{title}</h2>
+        <p className="text-sm text-[#e4eef5]">{subtitle}</p>
+      </div>
+    </section>
+  )
+}
+
+function ProductThumb({ item }: { item: PriceItem }) {
+  if (item.image) {
+    return <img src={assetUrl(item.image)} alt={item.name} loading="lazy" className="h-14 w-14 rounded-xl object-cover ring-1 ring-gray-200" />
+  }
+  return (
+    <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-[#e4eef5] text-[#0d4380]">
+      <PriceIcon name={item.icon} className="h-7 w-7" />
+    </span>
   )
 }
 
@@ -267,8 +310,9 @@ function SheetCalculator({ onAdd }: { onAdd: (line: QuoteLine) => void }) {
               type="button"
               onClick={() => setMaterialId(item.id)}
               aria-pressed={item.id === materialId}
-              className={`rounded-full border px-4 py-2 text-sm transition ${item.id === materialId ? 'border-[#0d4380] bg-[#0d4380] font-semibold text-white' : 'border-gray-300 text-gray-700 hover:border-[#1a5ba8]'}`}
+              className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${item.id === materialId ? 'border-[#0d4380] bg-[#0d4380] font-semibold text-white' : 'border-gray-300 text-gray-700 hover:border-[#1a5ba8]'}`}
             >
+              <PriceIcon name="sheet" className="h-4 w-4" />
               {item.name}
             </button>
           ))}
