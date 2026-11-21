@@ -9,14 +9,215 @@ import {
   sheetFormats,
   sheetMaterials,
 } from '@/data/materiales'
+import { DOZEN_QTY, priceCategories, unitPriceFor, type PriceCategory, type PriceItem } from '@/data/catalogo-precios'
 
 const WHATSAPP_NUMBER = '593980494770'
 const CUSTOM = 'personalizada'
+const SHEETS_TAB = 'planchas'
+
+export type QuoteLine = {
+  key: string
+  label: string
+  detail: string
+  total: number
+  from?: boolean
+}
 
 const money = (value: number) => `$${value.toFixed(2)}`
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
 
 export default function CotizadorClient() {
+  const [tab, setTab] = useState(SHEETS_TAB)
+  const [lines, setLines] = useState<QuoteLine[]>([])
+
+  const addLine = (line: QuoteLine) => {
+    setLines((current) => {
+      const existing = current.findIndex((item) => item.key === line.key)
+      if (existing === -1) return [...current, line]
+      return current.map((item, index) => (index === existing ? line : item))
+    })
+  }
+  const removeLine = (key: string) => setLines((current) => current.filter((item) => item.key !== key))
+
+  const total = lines.reduce((sum, line) => sum + line.total, 0)
+  const hasFrom = lines.some((line) => line.from)
+
+  const sendQuote = () => {
+    const body = lines.length
+      ? lines.map((line) => `- ${line.label} · ${line.detail} = ${line.from ? 'desde ' : ''}${money(line.total)}`).join('\n')
+      : 'Quisiera asesoría para una cotización.'
+    const message = `Hola Compumax, quiero cotizar:\n${body}\n\nTotal referencial: ${money(total)}`
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer')
+  }
+
+  const category = priceCategories.find((item) => item.id === tab)
+  const tabs = [{ id: SHEETS_TAB, name: 'Planchas y corte láser' }, ...priceCategories.map(({ id, name }) => ({ id, name }))]
+
+  return (
+    <main className="mx-auto max-w-6xl px-4 pb-16 pt-24 sm:px-6 lg:px-8" id="cotizar">
+      <header className="mb-6">
+        <p className="text-sm font-semibold uppercase tracking-widest text-[#1a5ba8]">Cotizar</p>
+        <h1 className="mt-1 text-3xl font-bold text-[#0d4380] sm:text-4xl">Lista de precios y cotizador</h1>
+        <p className="mt-2 max-w-2xl text-gray-600">
+          Elige una categoría, revisa el precio por unidad y por docena, y arma tu cotización. Desde {DOZEN_QTY} unidades se
+          aplica el precio por docena.
+        </p>
+      </header>
+
+      <nav aria-label="Categorías" className="-mx-4 mb-6 overflow-x-auto px-4">
+        <div className="flex gap-2 pb-1">
+          {tabs.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setTab(item.id)}
+              aria-pressed={item.id === tab}
+              className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm transition ${item.id === tab ? 'border-[#0d4380] bg-[#0d4380] font-semibold text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-[#1a5ba8]'}`}
+            >
+              {item.name}
+            </button>
+          ))}
+        </div>
+      </nav>
+
+      <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
+        <div>{category ? <CategoryList category={category} onAdd={addLine} /> : <SheetCalculator onAdd={addLine} />}</div>
+
+        <aside className="h-fit rounded-2xl bg-[#0d4380] p-5 text-white shadow-lg lg:sticky lg:top-24" aria-label="Tu cotización">
+          <h2 className="text-lg font-semibold">Tu cotización</h2>
+          {lines.length ? (
+            <ul className="mt-4 space-y-3">
+              {lines.map((line) => (
+                <li key={line.key} className="flex items-start justify-between gap-3 border-b border-[#1a5ba8] pb-3 text-sm">
+                  <div className="min-w-0">
+                    <p className="font-semibold leading-tight">{line.label}</p>
+                    <p className="text-xs text-[#c9dcef]">{line.detail}</p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <span className="tabular-nums">{line.from ? 'desde ' : ''}{money(line.total)}</span>
+                    <button type="button" onClick={() => removeLine(line.key)} aria-label={`Quitar ${line.label}`} className="rounded-full px-2 text-[#c9dcef] hover:bg-[#1a5ba8] hover:text-white">×</button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-4 rounded-lg border border-dashed border-[#5f8fc4] p-4 text-center text-sm text-[#c9dcef]">Aún no has añadido productos.</p>
+          )}
+          <div className="mt-4 flex items-baseline justify-between">
+            <span>Total referencial</span>
+            <strong className="text-3xl tabular-nums">{money(total)}</strong>
+          </div>
+          <p className="mt-1 text-xs text-[#c9dcef]">
+            Precios en USD.{hasFrom ? ' Los precios "desde" dependen de la medida.' : ''} Confirmamos el valor final por WhatsApp.
+          </p>
+          <button type="button" onClick={sendQuote} className="mt-4 w-full rounded-lg bg-[#25D366] py-3 text-sm font-bold text-[#062f2a] transition hover:bg-[#3ee07d]">
+            Enviar cotización por WhatsApp
+          </button>
+        </aside>
+      </div>
+    </main>
+  )
+}
+
+function CategoryList({ category, onAdd }: { category: PriceCategory; onAdd: (line: QuoteLine) => void }) {
+  const maxPrice = Math.max(...category.items.map((item) => item.unit ?? 0), 0.01)
+  const hasDozen = category.items.some((item) => item.dozen !== undefined)
+
+  return (
+    <section className="rounded-2xl bg-white p-5 shadow-sm" aria-labelledby="categoria-title">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <h2 id="categoria-title" className="text-lg font-semibold text-[#0d4380]">{category.name}</h2>
+        {hasDozen && (
+          <div className="flex gap-4 text-xs text-gray-600">
+            <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-sm bg-[#9dbad6]" />Unidad</span>
+            <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-sm bg-[#0d4380]" />Docena (c/u)</span>
+          </div>
+        )}
+      </div>
+      <ul className="mt-4 divide-y divide-gray-100">
+        {category.items.map((item) => (
+          <PriceRow key={item.code} item={item} maxPrice={maxPrice} onAdd={onAdd} />
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+function PriceRow({ item, maxPrice, onAdd }: { item: PriceItem; maxPrice: number; onAdd: (line: QuoteLine) => void }) {
+  const [quantity, setQuantity] = useState(1)
+  const price = unitPriceFor(item, quantity)
+  const prefix = item.from ? 'desde ' : ''
+  const per = item.per ? ` / ${item.per}` : ''
+  const savings = item.unit && item.dozen !== undefined && item.dozen < item.unit ? Math.round((1 - item.dozen / item.unit) * 100) : 0
+
+  const add = () => {
+    if (price === undefined) return
+    const usesDozen = item.dozen !== undefined && quantity >= DOZEN_QTY
+    onAdd({
+      key: `item-${item.code}`,
+      label: item.name,
+      detail: `${quantity}${item.per ? ` ${item.per}` : ''} × ${prefix}${money(price)}${usesDozen ? ' (precio docena)' : ''}`,
+      total: price * quantity,
+      from: item.from,
+    })
+  }
+
+  return (
+    <li className="grid gap-3 py-4 sm:grid-cols-[1fr_auto] sm:items-center">
+      <div className="min-w-0">
+        <p className="font-semibold text-gray-800">{item.name}</p>
+        <p className="text-xs text-gray-500">
+          {item.code}{item.note ? ` · ${item.note}` : ''}
+        </p>
+        {item.unit !== undefined ? (
+          <div className="mt-2 space-y-1">
+            <div className="grid grid-cols-[1fr_96px] items-center gap-2 text-sm">
+              <span className="h-3 rounded bg-gray-100"><span className="block h-3 rounded bg-[#9dbad6]" style={{ width: `${(item.unit / maxPrice) * 100}%` }} /></span>
+              <span className="tabular-nums text-gray-700">{prefix}{money(item.unit)}{per}</span>
+            </div>
+            {item.dozen !== undefined && (
+              <div className="grid grid-cols-[1fr_96px] items-center gap-2 text-sm">
+                <span className="h-3 rounded bg-gray-100"><span className="block h-3 rounded bg-[#0d4380]" style={{ width: `${(item.dozen / maxPrice) * 100}%` }} /></span>
+                <span className="tabular-nums font-semibold text-[#0d4380]">
+                  {prefix}{money(item.dozen)}{savings > 0 && <span className="ml-1 text-xs font-normal text-green-700">−{savings}%</span>}
+                </span>
+              </div>
+            )}
+          </div>
+        ) : (
+          <p className="mt-2 text-sm font-semibold text-[#1a5ba8]">Precio a consultar</p>
+        )}
+      </div>
+      {price !== undefined ? (
+        <div className="flex items-center gap-2">
+          <label className="sr-only" htmlFor={`qty-${item.code}`}>Cantidad de {item.name}</label>
+          <input
+            id={`qty-${item.code}`}
+            type="number"
+            min={1}
+            value={quantity}
+            onChange={(event) => setQuantity(Math.max(1, Math.floor(Number(event.target.value) || 1)))}
+            className="w-20 rounded-lg border border-gray-300 px-2 py-2 text-sm"
+          />
+          <button type="button" onClick={add} className="whitespace-nowrap rounded-lg bg-[#0d4380] px-3 py-2 text-sm font-semibold text-white hover:bg-[#1a5ba8]">
+            Añadir · {prefix}{money(price * quantity)}
+          </button>
+        </div>
+      ) : (
+        <a
+          href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola Compumax, quiero cotizar: ${item.name}`)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="whitespace-nowrap rounded-lg border border-[#0d4380] px-3 py-2 text-center text-sm font-semibold text-[#0d4380] hover:bg-[#e4eef5]"
+        >
+          Consultar
+        </a>
+      )}
+    </li>
+  )
+}
+
+function SheetCalculator({ onAdd }: { onAdd: (line: QuoteLine) => void }) {
   const [materialId, setMaterialId] = useState(sheetMaterials[0].id)
   const [formatId, setFormatId] = useState(sheetFormats[0].id)
   const [customWidth, setCustomWidth] = useState(60)
@@ -27,9 +228,7 @@ export default function CotizadorClient() {
   const material = sheetMaterials.find((item) => item.id === materialId) ?? sheetMaterials[0]
 
   const size = useMemo(() => {
-    if (formatId === CUSTOM) {
-      return { name: 'Medida personalizada', widthCm: customWidth, heightCm: customHeight }
-    }
+    if (formatId === CUSTOM) return { name: 'Medida personalizada', widthCm: customWidth, heightCm: customHeight }
     return sheetFormats.find((item) => item.id === formatId) ?? sheetFormats[0]
   }, [formatId, customWidth, customHeight])
 
@@ -37,192 +236,127 @@ export default function CotizadorClient() {
   const materialTotal = unitPrice * quantity
   const cutTotal = cutMinutes * CUT_PRICE_PER_MINUTE
   const total = materialTotal + cutTotal
+  const sizeLabel = `${size.widthCm} × ${size.heightCm} cm`
 
   const comparison = sheetMaterials
     .map((item) => ({ id: item.id, name: item.name, price: piecePrice(item, size.widthCm, size.heightCm) }))
     .sort((a, b) => b.price - a.price)
   const maxPrice = Math.max(...comparison.map((item) => item.price), 0.01)
 
-  const sizeLabel = `${size.widthCm} × ${size.heightCm} cm`
-
-  const requestQuote = () => {
-    const lines = [
-      'Hola Compumax, quiero cotizar:',
-      `- Material: ${material.name}`,
-      `- Formato: ${size.name} (${sizeLabel}) x${quantity} = ${money(materialTotal)}`,
-      cutMinutes > 0 ? `- Corte láser: ${cutMinutes} min = ${money(cutTotal)}` : null,
-      `Total referencial: ${money(total)}`,
-    ].filter(Boolean)
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener,noreferrer')
-  }
-
   const formatCards = [
     ...sheetFormats.map((item) => ({ ...item, price: piecePrice(material, item.widthCm, item.heightCm) })),
     { id: CUSTOM, name: 'Personalizada', widthCm: customWidth, heightCm: customHeight, price: piecePrice(material, customWidth, customHeight) },
   ]
 
+  const add = () =>
+    onAdd({
+      key: `plancha-${material.id}-${size.widthCm}x${size.heightCm}`,
+      label: `${material.name} · ${size.name}`,
+      detail: `${sizeLabel} × ${quantity}${cutMinutes > 0 ? ` + ${cutMinutes} min de corte` : ''}`,
+      total,
+    })
+
   return (
-    <main className="mx-auto max-w-6xl px-4 pb-16 pt-24 sm:px-6 lg:px-8" id="cotizar">
-      <header className="mb-8">
-        <p className="text-sm font-semibold uppercase tracking-widest text-[#1a5ba8]">Cotizar</p>
-        <h1 className="mt-1 text-3xl font-bold text-[#0d4380] sm:text-4xl">Materiales por plancha y corte láser</h1>
-        <p className="mt-2 max-w-2xl text-gray-600">
-          Elige el material y la medida. Te mostramos el precio de la plancha completa ({SHEET_WIDTH_CM} × {SHEET_HEIGHT_CM} cm),
-          media plancha, A3 o la medida que necesites, y puedes sumar minutos de corte láser.
-        </p>
-      </header>
+    <div className="space-y-6">
+      <section className="rounded-2xl bg-white p-5 shadow-sm" aria-labelledby="material-title">
+        <h2 id="material-title" className="text-lg font-semibold text-[#0d4380]">1. Material</h2>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {sheetMaterials.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setMaterialId(item.id)}
+              aria-pressed={item.id === materialId}
+              className={`rounded-full border px-4 py-2 text-sm transition ${item.id === materialId ? 'border-[#0d4380] bg-[#0d4380] font-semibold text-white' : 'border-gray-300 text-gray-700 hover:border-[#1a5ba8]'}`}
+            >
+              {item.name}
+            </button>
+          ))}
+        </div>
+      </section>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-        <div className="space-y-6">
-          <section className="rounded-2xl bg-white p-5 shadow-sm" aria-labelledby="material-title">
-            <h2 id="material-title" className="text-lg font-semibold text-[#0d4380]">1. Material</h2>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {sheetMaterials.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setMaterialId(item.id)}
-                  aria-pressed={item.id === materialId}
-                  className={`rounded-full border px-4 py-2 text-sm transition ${item.id === materialId ? 'border-[#0d4380] bg-[#0d4380] font-semibold text-white' : 'border-gray-300 text-gray-700 hover:border-[#1a5ba8]'}`}
-                >
-                  {item.name}
-                </button>
-              ))}
-            </div>
-          </section>
+      <section className="rounded-2xl bg-white p-5 shadow-sm" aria-labelledby="formato-title">
+        <h2 id="formato-title" className="text-lg font-semibold text-[#0d4380]">2. Medida</h2>
+        <p className="mt-1 text-xs text-gray-500">Plancha completa de {SHEET_WIDTH_CM} × {SHEET_HEIGHT_CM} cm.</p>
+        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
+          {formatCards.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setFormatId(item.id)}
+              aria-pressed={item.id === formatId}
+              className={`rounded-xl border p-3 text-left transition ${item.id === formatId ? 'border-[#0d4380] bg-[#e4eef5] ring-2 ring-[#0d4380]' : 'border-gray-200 hover:border-[#1a5ba8]'}`}
+            >
+              <span className="block text-sm font-semibold text-gray-800">{item.name}</span>
+              <span className="block text-xs text-gray-500">{item.widthCm} × {item.heightCm} cm</span>
+              <span className="mt-2 block text-xl font-bold text-[#0d4380]">{money(item.price)}</span>
+            </button>
+          ))}
+        </div>
+        {formatId === CUSTOM && (
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:max-w-sm">
+            <label className="text-sm text-gray-700">
+              Ancho (cm)
+              <input type="number" min={1} max={SHEET_WIDTH_CM} value={customWidth} onChange={(event) => setCustomWidth(clamp(Number(event.target.value) || 1, 1, SHEET_WIDTH_CM))} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" />
+            </label>
+            <label className="text-sm text-gray-700">
+              Alto (cm)
+              <input type="number" min={1} max={SHEET_HEIGHT_CM} value={customHeight} onChange={(event) => setCustomHeight(clamp(Number(event.target.value) || 1, 1, SHEET_HEIGHT_CM))} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" />
+            </label>
+          </div>
+        )}
+      </section>
 
-          <section className="rounded-2xl bg-white p-5 shadow-sm" aria-labelledby="formato-title">
-            <h2 id="formato-title" className="text-lg font-semibold text-[#0d4380]">2. Medida</h2>
-            <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
-              {formatCards.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setFormatId(item.id)}
-                  aria-pressed={item.id === formatId}
-                  className={`rounded-xl border p-3 text-left transition ${item.id === formatId ? 'border-[#0d4380] bg-[#e4eef5] ring-2 ring-[#0d4380]' : 'border-gray-200 hover:border-[#1a5ba8]'}`}
-                >
-                  <span className="block text-sm font-semibold text-gray-800">{item.name}</span>
-                  <span className="block text-xs text-gray-500">{item.widthCm} × {item.heightCm} cm</span>
-                  <span className="mt-2 block text-xl font-bold text-[#0d4380]">{money(item.price)}</span>
-                </button>
-              ))}
-            </div>
-            {formatId === CUSTOM && (
-              <div className="mt-4 grid grid-cols-2 gap-3 sm:max-w-sm">
-                <label className="text-sm text-gray-700">
-                  Ancho (cm)
-                  <input
-                    type="number"
-                    min={1}
-                    max={SHEET_WIDTH_CM}
-                    value={customWidth}
-                    onChange={(event) => setCustomWidth(clamp(Number(event.target.value) || 1, 1, SHEET_WIDTH_CM))}
-                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
-                  />
-                </label>
-                <label className="text-sm text-gray-700">
-                  Alto (cm)
-                  <input
-                    type="number"
-                    min={1}
-                    max={SHEET_HEIGHT_CM}
-                    value={customHeight}
-                    onChange={(event) => setCustomHeight(clamp(Number(event.target.value) || 1, 1, SHEET_HEIGHT_CM))}
-                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
-                  />
-                </label>
-              </div>
-            )}
-          </section>
-
-          <section className="rounded-2xl bg-white p-5 shadow-sm" aria-labelledby="cantidad-title">
-            <h2 id="cantidad-title" className="text-lg font-semibold text-[#0d4380]">3. Cantidad y corte láser</h2>
-            <div className="mt-3 grid gap-4 sm:grid-cols-2">
-              <label className="text-sm text-gray-700">
-                Cantidad de piezas
-                <input
-                  type="number"
-                  min={1}
-                  value={quantity}
-                  onChange={(event) => setQuantity(Math.max(1, Math.floor(Number(event.target.value) || 1)))}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
-                />
-              </label>
-              <label className="text-sm text-gray-700">
-                Minutos de corte láser (total)
-                <input
-                  type="number"
-                  min={0}
-                  value={cutMinutes}
-                  onChange={(event) => setCutMinutes(Math.max(0, Number(event.target.value) || 0))}
-                  className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2"
-                />
-                <span className="mt-1 block text-xs text-gray-500">{money(CUT_PRICE_PER_MINUTE)} por minuto</span>
-              </label>
-            </div>
-          </section>
-
-          <section className="rounded-2xl bg-white p-5 shadow-sm" aria-labelledby="comparar-title">
-            <h2 id="comparar-title" className="text-lg font-semibold text-[#0d4380]">Comparar materiales · {size.name} ({sizeLabel})</h2>
-            <ul className="mt-4 space-y-2">
-              {comparison.map((item) => {
-                const active = item.id === material.id
-                return (
-                  <li key={item.id}>
-                    <button type="button" onClick={() => setMaterialId(item.id)} className="grid w-full grid-cols-[96px_1fr_64px] items-center gap-3 text-left text-sm">
-                      <span className={active ? 'font-semibold text-[#0d4380]' : 'text-gray-700'}>{item.name}</span>
-                      <span className="h-5 rounded bg-gray-100">
-                        <span
-                          className={`block h-5 rounded transition-all ${active ? 'bg-[#0d4380]' : 'bg-[#9dbad6]'}`}
-                          style={{ width: `${(item.price / maxPrice) * 100}%` }}
-                        />
-                      </span>
-                      <span className={`text-right tabular-nums ${active ? 'font-semibold text-[#0d4380]' : 'text-gray-600'}`}>{money(item.price)}</span>
-                    </button>
-                  </li>
-                )
-              })}
-            </ul>
-          </section>
+      <section className="rounded-2xl bg-white p-5 shadow-sm" aria-labelledby="cantidad-title">
+        <h2 id="cantidad-title" className="text-lg font-semibold text-[#0d4380]">3. Cantidad y corte láser</h2>
+        <div className="mt-3 grid gap-4 sm:grid-cols-2">
+          <label className="text-sm text-gray-700">
+            Cantidad de piezas
+            <input type="number" min={1} value={quantity} onChange={(event) => setQuantity(Math.max(1, Math.floor(Number(event.target.value) || 1)))} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" />
+          </label>
+          <label className="text-sm text-gray-700">
+            Minutos de corte láser (total)
+            <input type="number" min={0} value={cutMinutes} onChange={(event) => setCutMinutes(Math.max(0, Number(event.target.value) || 0))} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" />
+            <span className="mt-1 block text-xs text-gray-500">{money(CUT_PRICE_PER_MINUTE)} por minuto</span>
+          </label>
         </div>
 
-        <aside className="h-fit rounded-2xl bg-[#0d4380] p-5 text-white shadow-lg lg:sticky lg:top-24" aria-label="Resumen de la cotización">
-          <h2 className="text-lg font-semibold">Tu cotización</h2>
-          <dl className="mt-4 space-y-2 text-sm">
-            <div className="flex justify-between gap-3"><dt className="text-[#c9dcef]">Material</dt><dd>{material.name}</dd></div>
-            <div className="flex justify-between gap-3"><dt className="text-[#c9dcef]">Medida</dt><dd className="text-right">{size.name}<br /><span className="text-xs text-[#c9dcef]">{sizeLabel}</span></dd></div>
-            <div className="flex justify-between gap-3"><dt className="text-[#c9dcef]">Precio por pieza</dt><dd className="tabular-nums">{money(unitPrice)}</dd></div>
-            <div className="flex justify-between gap-3"><dt className="text-[#c9dcef]">Material × {quantity}</dt><dd className="tabular-nums">{money(materialTotal)}</dd></div>
-            <div className="flex justify-between gap-3"><dt className="text-[#c9dcef]">Corte láser · {cutMinutes} min</dt><dd className="tabular-nums">{money(cutTotal)}</dd></div>
-          </dl>
-
-          <div className="mt-4" aria-hidden={total === 0}>
-            <div className="flex h-3 overflow-hidden rounded-full bg-[#1a5ba8]">
-              <span className="bg-[#f7c34d]" style={{ width: `${total ? (materialTotal / total) * 100 : 0}%` }} />
-              <span className="bg-[#7fd1ae]" style={{ width: `${total ? (cutTotal / total) * 100 : 0}%` }} />
-            </div>
-            <div className="mt-2 flex gap-4 text-xs text-[#c9dcef]">
-              <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-[#f7c34d]" />Material</span>
-              <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-[#7fd1ae]" />Corte láser</span>
-            </div>
+        <div className="mt-5 rounded-xl bg-[#f4f8fb] p-4">
+          <div className="flex h-3 overflow-hidden rounded-full bg-gray-200">
+            <span className="bg-[#0d4380]" style={{ width: `${total ? (materialTotal / total) * 100 : 0}%` }} />
+            <span className="bg-[#f7c34d]" style={{ width: `${total ? (cutTotal / total) * 100 : 0}%` }} />
           </div>
-
-          <div className="mt-5 flex items-baseline justify-between border-t border-[#1a5ba8] pt-4">
-            <span>Total referencial</span>
-            <strong className="text-3xl tabular-nums">{money(total)}</strong>
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-sm">
+            <div className="flex gap-4 text-gray-600">
+              <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-full bg-[#0d4380]" />Material {money(materialTotal)}</span>
+              <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-full bg-[#f7c34d]" />Corte {money(cutTotal)}</span>
+            </div>
+            <button type="button" onClick={add} className="rounded-lg bg-[#0d4380] px-4 py-2 font-semibold text-white hover:bg-[#1a5ba8]">
+              Añadir · {money(total)}
+            </button>
           </div>
-          <p className="mt-1 text-xs text-[#c9dcef]">Precios en USD. Confirmamos el valor final por WhatsApp.</p>
+        </div>
+      </section>
 
-          <button
-            type="button"
-            onClick={requestQuote}
-            className="mt-4 w-full rounded-lg bg-[#25D366] py-3 text-sm font-bold text-[#062f2a] transition hover:bg-[#3ee07d]"
-          >
-            Enviar cotización por WhatsApp
-          </button>
-        </aside>
-      </div>
-    </main>
+      <section className="rounded-2xl bg-white p-5 shadow-sm" aria-labelledby="comparar-title">
+        <h2 id="comparar-title" className="text-lg font-semibold text-[#0d4380]">Comparar materiales · {size.name} ({sizeLabel})</h2>
+        <ul className="mt-4 space-y-2">
+          {comparison.map((item) => {
+            const active = item.id === material.id
+            return (
+              <li key={item.id}>
+                <button type="button" onClick={() => setMaterialId(item.id)} className="grid w-full grid-cols-[96px_1fr_64px] items-center gap-3 text-left text-sm">
+                  <span className={active ? 'font-semibold text-[#0d4380]' : 'text-gray-700'}>{item.name}</span>
+                  <span className="h-5 rounded bg-gray-100">
+                    <span className={`block h-5 rounded transition-all ${active ? 'bg-[#0d4380]' : 'bg-[#9dbad6]'}`} style={{ width: `${(item.price / maxPrice) * 100}%` }} />
+                  </span>
+                  <span className={`text-right tabular-nums ${active ? 'font-semibold text-[#0d4380]' : 'text-gray-600'}`}>{money(item.price)}</span>
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      </section>
+    </div>
   )
 }

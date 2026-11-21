@@ -11,8 +11,9 @@ de la agencia, su portafolio y clientes, y permite a cualquier persona cotizar o
   **letras corpóreas**, **rótulos empresariales**, **señalética** interior y **reconocimientos** (trofeos y placas).
 - Mostrar el **portafolio** de trabajos y una franja de **clientes** que ya confían en la agencia.
 - Ofrecer un **catálogo de Navidad** con carrito para armar pedidos de temporada.
-- **Cotizar** materiales en plancha (MDF, acrílico, sintra, coroplast, foam board) por plancha completa, media plancha,
-  A3 o medida propia, con minutos de corte láser; los precios están en `src/data/materiales.ts`.
+- **Cotizar**: lista de precios por categoría con valor por unidad y por docena, y cotizador de materiales en plancha
+  (MDF, acrílico, sintra, coroplast, foam board) por plancha completa, media plancha, A3 o medida propia, con minutos de
+  corte láser. Los precios están en `src/data/catalogo-precios.ts` y `src/data/materiales.ts`.
 - Facilitar el contacto: botón flotante de **WhatsApp**, teléfono, correo y ubicación.
 
 ## Detalles técnicos
@@ -43,7 +44,7 @@ npm run build    # compilación de producción
 ## In English
 
 Website of Compumax, a design and advertising agency in Tulcán, Ecuador: services (laser cutting, textile printing,
-signage, corporate lettering), portfolio, a Christmas catalogue with a cart, a quote page for sheet materials and laser cutting minutes, and one-click WhatsApp contact.
+signage, corporate lettering), portfolio, a Christmas catalogue with a cart, a quote page (price list by category with unit and dozen prices, plus a sheet-material and laser-cutting calculator), and one-click WhatsApp contact.
 Built with Next.js 15, React 19, TypeScript and Tailwind CSS, deployed on Vercel.
 
 ## Licencia
