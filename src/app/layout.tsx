@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Compumax - Diseño y Tecnología",
     description: "Publicidad que piensa. Tecnología que impulsa.",
-    url: "https://compumax.com",
+    url: "https://compumax.dev",
     siteName: "Compumax",
     type: "website",
     images: [

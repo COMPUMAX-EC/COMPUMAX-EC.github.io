@@ -3,7 +3,7 @@
 Sitio web oficial de **Compumax**, agencia de diseño y publicidad de **Tulcán, Ecuador**. Muestra los servicios
 de la agencia, su portafolio y clientes, y permite a cualquier persona cotizar o escribir por WhatsApp en un clic.
 
-**Sitio en línea:** https://compumax-ec-github-io.vercel.app
+**Sitio en línea:** https://compumax.dev
 
 ## Para qué sirve
 
