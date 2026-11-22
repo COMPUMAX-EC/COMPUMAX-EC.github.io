@@ -164,10 +164,12 @@ function PriceRow({ item, maxPrice, onAdd }: { item: PriceItem; maxPrice: number
   const prefix = item.from ? 'desde ' : ''
   const per = item.per ? ` / ${item.per}` : ''
   const savings = item.unit && item.dozen !== undefined && item.dozen < item.unit ? Math.round((1 - item.dozen / item.unit) * 100) : 0
+  const hasDozen = item.dozen !== undefined
+  const usesDozen = hasDozen && quantity >= DOZEN_QTY
+  const missing = DOZEN_QTY - quantity
 
   const add = () => {
     if (price === undefined) return
-    const usesDozen = item.dozen !== undefined && quantity >= DOZEN_QTY
     onAdd({
       key: `item-${item.code}`,
       label: item.name,
@@ -189,15 +191,22 @@ function PriceRow({ item, maxPrice, onAdd }: { item: PriceItem; maxPrice: number
           <div className="mt-2 space-y-1">
             <div className="grid grid-cols-[1fr_96px] items-center gap-2 text-sm">
               <span className="h-3 rounded bg-gray-100"><span className="block h-3 rounded bg-[#9dbad6]" style={{ width: `${(item.unit / maxPrice) * 100}%` }} /></span>
-              <span className="tabular-nums text-gray-700">{prefix}{money(item.unit)}{per}</span>
+              <span className={`tabular-nums ${usesDozen ? 'text-gray-400 line-through' : 'font-semibold text-gray-800'}`}>{prefix}{money(item.unit)}{per}</span>
             </div>
             {item.dozen !== undefined && (
               <div className="grid grid-cols-[1fr_96px] items-center gap-2 text-sm">
                 <span className="h-3 rounded bg-gray-100"><span className="block h-3 rounded bg-[#0d4380]" style={{ width: `${(item.dozen / maxPrice) * 100}%` }} /></span>
-                <span className="tabular-nums font-semibold text-[#0d4380]">
+                <span className={`tabular-nums ${usesDozen ? 'font-semibold text-[#0d4380]' : 'text-gray-600'}`}>
                   {prefix}{money(item.dozen)}{savings > 0 && <span className="ml-1 text-xs font-normal text-green-700">−{savings}%</span>}
                 </span>
               </div>
+            )}
+            {hasDozen && (
+              <p className={`text-xs ${usesDozen ? 'font-semibold text-green-700' : 'text-gray-500'}`}>
+                {usesDozen
+                  ? `Precio por docena aplicado: ${prefix}${money(item.dozen!)} c/u`
+                  : `Desde ${DOZEN_QTY} unidades: ${prefix}${money(item.dozen!)} c/u${missing > 0 && quantity > 1 ? ` · te faltan ${missing}` : ''}`}
+              </p>
             )}
           </div>
         ) : (
@@ -205,16 +214,29 @@ function PriceRow({ item, maxPrice, onAdd }: { item: PriceItem; maxPrice: number
         )}
       </div>
       {price !== undefined ? (
-        <div className="col-span-2 flex items-center gap-2 sm:col-span-1">
-          <label className="sr-only" htmlFor={`qty-${item.code}`}>Cantidad de {item.name}</label>
-          <input
-            id={`qty-${item.code}`}
-            type="number"
-            min={1}
-            value={quantity}
-            onChange={(event) => setQuantity(Math.max(1, Math.floor(Number(event.target.value) || 1)))}
-            className="w-20 rounded-lg border border-gray-300 px-2 py-2 text-sm"
-          />
+        <div className="col-span-2 flex flex-wrap items-center gap-2 sm:col-span-1 sm:max-w-[260px] sm:justify-end">
+          <div className="flex items-center rounded-lg border border-gray-300">
+            <button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))} aria-label={`Quitar una unidad de ${item.name}`} className="px-3 py-2 text-gray-600 hover:text-[#0d4380]">−</button>
+            <NumberField
+              id={`qty-${item.code}`}
+              ariaLabel={`Cantidad de ${item.name}`}
+              value={quantity}
+              onChange={setQuantity}
+              min={1}
+              integer
+              className="w-14 border-x border-gray-300 py-2 text-center text-sm [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            />
+            <button type="button" onClick={() => setQuantity(quantity + 1)} aria-label={`Añadir una unidad de ${item.name}`} className="px-3 py-2 text-gray-600 hover:text-[#0d4380]">+</button>
+          </div>
+          {hasDozen && (
+            <button
+              type="button"
+              onClick={() => setQuantity(usesDozen ? Math.floor(quantity / DOZEN_QTY) * DOZEN_QTY + DOZEN_QTY : DOZEN_QTY)}
+              className="rounded-lg border border-[#0d4380] px-3 py-2 text-xs font-semibold text-[#0d4380] hover:bg-[#e4eef5]"
+            >
+              {usesDozen ? '+1 docena' : 'Docena'}
+            </button>
+          )}
           <button type="button" onClick={add} className="whitespace-nowrap rounded-lg bg-[#0d4380] px-3 py-2 text-sm font-semibold text-white hover:bg-[#1a5ba8]">
             Añadir · {prefix}{money(price * quantity)}
           </button>
@@ -230,6 +252,54 @@ function PriceRow({ item, maxPrice, onAdd }: { item: PriceItem; maxPrice: number
         </a>
       )}
     </li>
+  )
+}
+
+/**
+ * Campo numérico que deja borrar y escribir libremente; el valor se aplica en cuanto es válido
+ * y se normaliza al salir del campo.
+ */
+function NumberField({
+  value,
+  onChange,
+  min,
+  max = Number.POSITIVE_INFINITY,
+  integer = false,
+  id,
+  className,
+  ariaLabel,
+}: {
+  value: number
+  onChange: (value: number) => void
+  min: number
+  max?: number
+  integer?: boolean
+  id?: string
+  className?: string
+  ariaLabel?: string
+}) {
+  const [draft, setDraft] = useState<string | null>(null)
+  const normalize = (raw: number) => clamp(integer ? Math.floor(raw) : raw, min, max)
+
+  return (
+    <input
+      id={id}
+      type="number"
+      inputMode={integer ? 'numeric' : 'decimal'}
+      min={min}
+      max={Number.isFinite(max) ? max : undefined}
+      aria-label={ariaLabel}
+      value={draft ?? String(value)}
+      onChange={(event) => {
+        const text = event.target.value
+        setDraft(text)
+        const parsed = Number(text)
+        if (text.trim() !== '' && Number.isFinite(parsed) && parsed >= min) onChange(normalize(parsed))
+      }}
+      onFocus={(event) => event.target.select()}
+      onBlur={() => setDraft(null)}
+      className={className}
+    />
   )
 }
 
@@ -341,11 +411,11 @@ function SheetCalculator({ onAdd }: { onAdd: (line: QuoteLine) => void }) {
           <div className="mt-4 grid grid-cols-2 gap-3 sm:max-w-sm">
             <label className="text-sm text-gray-700">
               Ancho (cm)
-              <input type="number" min={1} max={SHEET_WIDTH_CM} value={customWidth} onChange={(event) => setCustomWidth(clamp(Number(event.target.value) || 1, 1, SHEET_WIDTH_CM))} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" />
+              <NumberField min={1} max={SHEET_WIDTH_CM} value={customWidth} onChange={setCustomWidth} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" />
             </label>
             <label className="text-sm text-gray-700">
               Alto (cm)
-              <input type="number" min={1} max={SHEET_HEIGHT_CM} value={customHeight} onChange={(event) => setCustomHeight(clamp(Number(event.target.value) || 1, 1, SHEET_HEIGHT_CM))} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" />
+              <NumberField min={1} max={SHEET_HEIGHT_CM} value={customHeight} onChange={setCustomHeight} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" />
             </label>
           </div>
         )}
@@ -356,11 +426,11 @@ function SheetCalculator({ onAdd }: { onAdd: (line: QuoteLine) => void }) {
         <div className="mt-3 grid gap-4 sm:grid-cols-2">
           <label className="text-sm text-gray-700">
             Cantidad de piezas
-            <input type="number" min={1} value={quantity} onChange={(event) => setQuantity(Math.max(1, Math.floor(Number(event.target.value) || 1)))} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" />
+            <NumberField min={1} integer value={quantity} onChange={setQuantity} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" />
           </label>
           <label className="text-sm text-gray-700">
             Minutos de corte láser (total)
-            <input type="number" min={0} value={cutMinutes} onChange={(event) => setCutMinutes(Math.max(0, Number(event.target.value) || 0))} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" />
+            <NumberField min={0} value={cutMinutes} onChange={setCutMinutes} className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" />
             <span className="mt-1 block text-xs text-gray-500">{money(CUT_PRICE_PER_MINUTE)} por minuto</span>
           </label>
         </div>
